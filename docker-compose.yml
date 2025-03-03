@@ -1,0 +1,27 @@
+services:
+  model_server:
+    build:
+      context: ./model_server
+    container_name: model_server
+    volumes:
+      - ./model:/app/model
+    networks:
+      - recommender_network  
+
+  api:
+    build:
+      context: ./api
+    container_name: api_server
+    depends_on:
+      - model_server
+    volumes:
+      - ./model:/app/model
+    ports:
+      - "8000:8000"
+    networks:
+      - recommender_network  
+
+# 🚀 Adicione esta seção para definir a rede!
+networks:
+  recommender_network:
+    driver: bridge
